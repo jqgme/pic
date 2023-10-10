@@ -1,5 +1,6 @@
 import subprocess
 import requests
+import time
 
 def send_notification(message):
     # 替换为你的Telegram Bot的API令牌和聊天ID
@@ -15,8 +16,10 @@ def send_notification(message):
 
 def check_host():
     hostname = '192.168.1.90'
-    result = subprocess.run(['ping', '-c', '1', hostname], stdout=subprocess.DEVNULL)
-    if result.returncode != 0:
-        send_notification('群晖nas宕机了')
+    while True:
+        result = subprocess.run(['ping', '-c', '1', hostname], stdout=subprocess.DEVNULL)
+        if result.returncode != 0:
+            send_notification('群晖nas宕机了')
+        time.sleep(15)  # 每隔15秒执行一次ping
 
 check_host()
